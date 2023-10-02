@@ -1,47 +1,42 @@
-import { StatusBar } from "expo-status-bar";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import "react-native-gesture-handler";
+import React, { useState, useEffect } from "react";
+import { initializeDatabase, getTodos } from "./data/database/database";
+import { HomeScreen } from "./screens/HomeScreen";
+import { DetailScreen } from "./screens/DetailScreen";
+import { CreateScreen } from "./screens/CreateScreen";
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
+// expo add expo-sqlite
 
-const data = [
-  { key: "1", title: "Tarea 1" },
-  { key: "2", title: "Tarea 2" },
-];
-
-const renderItem = ({ item }) => {
-  return <Text>{item.title}</Text>;
-};
+/*
+import { createStackNavigator } from "@react-navigation/stack";
+*/
+const Stack = createStackNavigator();
 
 export default function App() {
+  useEffect(() => {
+    initializeDatabase();
+  }, []);
+
   return (
-    <View style={styles.container}>
-      {/* Título de la aplicación */}
-      <Text style={styles.title}>TodoApp</Text>
-      {/* Contenedor del card */}
-      <View style={styles.card}>
-        {/* Lista de tareas */}
-        <FlatList data={data} renderItem={renderItem} />
-      </View>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen
+          name="Home"
+          options={{ title: null }}
+          component={HomeScreen}
+        />
+        <Stack.Screen
+          name="Create"
+          options={{ title: null }}
+          component={CreateScreen}
+        />
+        <Stack.Screen
+          name="Detail"
+          options={{ title: null }}
+          component={DetailScreen}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  card: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 10,
-    padding: 20,
-    width: "80%",
-  },
-});
