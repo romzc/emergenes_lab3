@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { Checkbox } from "../components/CheckBox";
+import { Checkbox } from "./Checkbox";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 
 export const TodoItem = ({ task }) => {
   const { id, title, description, done, end_date, start_date, priority } = task;
   const [isChecked, setIsChecked] = useState(done);
+  const navigation = useNavigation();
 
   const getPriorityColor = () => {
     switch (priority) {
@@ -23,6 +26,11 @@ export const TodoItem = ({ task }) => {
     textDecorationLine: done ? "line-through" : "none",
   };
 
+  const handleTitlePress = () => {
+    // Navegar a la pantalla de detalle pasando los datos que desees
+    navigation.navigate("Detail", { idTodo: id });
+  };
+
   return (
     <View
       style={[style.todoItemContainer, { backgroundColor: getPriorityColor() }]}
@@ -35,7 +43,9 @@ export const TodoItem = ({ task }) => {
         />
       </View>
       <View style={style.textContainer}>
-        <Text style={[style.title, textStyle]}>{title}</Text>
+        <TouchableOpacity onPress={handleTitlePress}>
+          <Text style={[style.title, textStyle]}>{title}</Text>
+        </TouchableOpacity>
         <Text style={[style.description, textStyle]}>{description}</Text>
       </View>
       <View style={style.dateContainer}>
