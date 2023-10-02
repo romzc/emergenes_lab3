@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { addTodo } from "../data/database/database";
+import { addTodo, initializeDatabase } from "../data/database/database";
 import { View, StyleSheet, Text, TextInput, Button } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import DatePicker from "@react-native-community/datetimepicker";
@@ -37,7 +37,7 @@ export const CreateScreen = () => {
     }
   };
 
-  const handleCrearTarea = () => {
+  const handleCrearTarea = async () => {
     // Validación #1: El título no debe estar vacío
     if (!title.trim()) {
       alert("Por favor, ingresa un título válido para la tarea.");
@@ -51,7 +51,15 @@ export const CreateScreen = () => {
       alert("La fecha de fin no puede ser anterior a la fecha actual.");
       return;
     }
-    addTodo(title, description, endDate.toISOString().split("T")[0], priority);
+
+    await addTodo(
+      title,
+      description,
+      endDate.toISOString().split("T")[0],
+      Number(priority)
+    );
+
+    console.log("se guardo la tarea");
 
     cleanForm();
   };

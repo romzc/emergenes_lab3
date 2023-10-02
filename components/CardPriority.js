@@ -9,8 +9,8 @@ export const CardPriority = ({ color, quantity, title }) => {
 
   return (
     <View style={[style.cardContainer, cardStyle]}>
-      <Text>{title}</Text>
-      <Text>{quantity}</Text>
+      <Text style={style.cartTitle}>{title}</Text>
+      <Text style={style.cardPriority}>{quantity} Tareas</Text>
     </View>
   );
 };
@@ -21,6 +21,18 @@ const style = StyleSheet.create({
     borderRadius: 8,
     width: 120,
     height: 120,
-    marginHorizontal: 6
+    marginHorizontal: 6,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between"
   },
+  cartTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#040c3a"
+  },
+  cardPriority: {
+    color: "#040c3a",
+    fontSize: 13
+  }
 });

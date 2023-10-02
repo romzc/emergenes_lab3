@@ -26,19 +26,19 @@ export const initializeDatabase = () => {
  * @returns
  */
 export const addTodo = (title, description, endDate, priority) => {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Agrega ceros a la izquierda si es necesario
+  const day = String(currentDate.getDate()).padStart(2, "0"); // Agrega ceros a la izquierda si es necesario
+  const startDate = `${year}-${month}-${day}`;
+
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "INSERT INTO todos (title, description, end_date, priority) VALUES (?, ?, ?, ?)",
-        [title, description, endDate, priority],
-        (txtObj, result) => {
-          console.log("dentro de add todos")
-          console.log(getTodos())
-          resolve(result.insertId);
-        },
-        (txtObj, error) => {
-          reject(error);
-        }
+        "INSERT INTO todos (title, description, start_date, end_date, priority) VALUES (?, ?, ?, ?, ?)",
+        [title, description, startDate, endDate, priority],
+        (txtObj, result) => resolve(result.insertId),
+        (txtObj, error) => reject(error)
       );
     });
   });
@@ -48,14 +48,9 @@ export const getTodos = () => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "SELECT * FROM todos",
-        [],
-        (txtObj, resultSet) => {
-          resolve(resultSet.rows._array);
-        },
-        (txtObj, error) => {
-          reject(error);
-        }
+        "SELECT * FROM todos", [],
+        (txtObj, resultSet) => resolve(resultSet.rows._array),
+        (txtObj, error) => reject(error)
       );
     });
   });

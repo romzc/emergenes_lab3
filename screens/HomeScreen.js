@@ -10,10 +10,11 @@ import {
 import { getTodos } from "../data/database/database";
 import { SearchView } from "../components/SearchView";
 import { CardPriority } from "../components/CardPriority";
+import { TodoItem } from "../components/TodoItem";
 
 export const HomeScreen = ({ navigation }) => {
   const [todos, setTodos] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState("");
 
   const loadTodos = async () => {
     try {
@@ -25,7 +26,7 @@ export const HomeScreen = ({ navigation }) => {
   };
 
   const todoRenders = todos.map((todo) => (
-    <Text key={todo.id}>{todo.title}</Text>
+    <TodoItem key={todo.id}  task={todo}/>
   ));
 
   useEffect(() => {
@@ -46,33 +47,36 @@ export const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.headContainer}>
-        <Text style={styles.title}>Hello</Text>
-        <Text style={styles.subTitle}>What will we do today?</Text>
+        <Text style={styles.title}>Hola</Text>
+        <Text style={styles.subTitle}>¿Qué haremos hoy dia?</Text>
         <SearchView onChangeTextQuery={setSearchQuery} value={searchQuery} />
       </View>
 
       <View style={styles.headContainer}>
-        <Text style={styles.subTitle}>Priority</Text>
+        <Text style={styles.subTitle}>Prioridad</Text>
         <ScrollView style={styles.cardContainer} horizontal={true}>
           <CardPriority
-            color={"#0ca6ff"}
-            title={"High priority"}
-            quantity={3}
+            color={"#ff5081"}
+            title={"Prioridad\nalta"}
+            quantity={1}
           />
           <CardPriority
-            color={"#ff5081"}
-            title={"Normal priority"}
-            quantity={3}
+            color={"#0ca6ff"}
+            title={"Prioridad\nnormal"}
+            quantity={2}
           />
-          <CardPriority 
-            color={"#ffc136"} 
-            title={"Low priority"} 
-            quantity={3} 
+          <CardPriority
+            color={"#ffc136"}
+            title={"Prioridad\nbaja"}
+            quantity={3}
           />
         </ScrollView>
       </View>
 
-      <ScrollView style={styles.todoContainer}>{todoRenders}</ScrollView>
+      <View style={styles.taskContainer}>
+        <Text style={styles.subTitle}>Tareas</Text>
+        <ScrollView>{todoRenders}</ScrollView>
+      </View>
 
       <TouchableOpacity
         onPress={() => navigation.navigate("Create")}
@@ -101,6 +105,12 @@ const styles = StyleSheet.create({
     display: "flex",
     width: "100%",
     rowGap: 12,
+  },
+  taskContainer: {
+    display: "flex",
+    width: "100%",
+    rowGap: 12,
+    flex: 1
   },
   title: {
     fontSize: 16,
@@ -135,6 +145,6 @@ const styles = StyleSheet.create({
   cardContainer: {
     display: "flex",
     flexDirection: "row",
-    columnGap: 10
+    columnGap: 10,
   },
 });
