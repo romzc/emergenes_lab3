@@ -9,6 +9,7 @@ import { CreateScreen } from "./screens/CreateScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
 // expo add expo-sqlite
 
 /*
@@ -49,10 +50,46 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator screenOptions={{ headerShown: false }}>
-        <Tab.Screen name="Home" component = {HomeStackScreen} />
+      <Tab.Navigator 
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          if (route.name === 'Home') {
+            return (
+              <Ionicons
+                name={
+                  focused
+                    ? 'home'
+                    : 'home-outline'
+                }
+                size={size}
+                color={color}
+              />
+            );
+          } else if (route.name === 'Hechos') {
+            return (
+              <Ionicons
+                name={focused ? 'checkmark-circle' : 'checkmark-circle-outline'}
+                size={size}
+                color={color}
+              />
+            );
+          }else if (route.name === 'No Hechos') {
+            return (
+              <Ionicons
+                name={focused ? 'close-circle' : 'close-circle-outline'}
+                size={size}
+                color={color}
+              />
+            );
+          }
+        },
+        tabBarInactiveTintColor: 'gray',
+        tabBarActiveTintColor: 'tomato',
+      })}
+      >
+        <Tab.Screen  name="Home" component = {HomeStackScreen} />
         <Tab.Screen name="Hechos" component={DoneScreen}></Tab.Screen>
-        <Tab.Screen name="No hechos" component={NoDoneScreen}></Tab.Screen>
+        <Tab.Screen name="No Hechos" component={NoDoneScreen}></Tab.Screen>
       </Tab.Navigator>
     </NavigationContainer>
   );
