@@ -40,6 +40,7 @@ export const addTodo = (title, description, startDate, endDate, priority) => {
   });
 };
 
+
 export const getTodos = () => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {

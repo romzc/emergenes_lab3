@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import { addTodo } from "../data/database/database";
 import { View, StyleSheet, Text, SafeAreaView, TextInput } from "react-native";
+import { title } from "process";
 
 export const CreateScreen = () => {
   const [formState, setFormState] = useState({
-    title: null,
-    description: null,
+    title: "",
+    description: "",
     startDate: null,
     endDate: null,
-    priority: null
+    priority: null,
   });
 
   const handleForm = (event) => {
-  }
+    const { nativeID } = event;
+  };
 
   return (
     <View style={styles.container}>
@@ -22,11 +24,24 @@ export const CreateScreen = () => {
       </View>
 
       <View>
-        <TextInput placeholder="Task title..." />
-        <TextInput placeholder="Task description..."/>
-        
-      </View>
+        <TextInput
+          nativeID="title"
+          placeholder="Task title..."
+          value={formState.title}
+          onChangeText={handleForm}
+        />
+        <TextInput
+          placeholder="Task description..."
+          value={formState.description}
+        />
 
+        <TextInput
+          onChangeText={handleForm}
+          value={formState.priority}
+          keyboardType="numeric"
+          placeholder="priority Eg: 1"
+        />
+      </View>
     </View>
   );
 };
