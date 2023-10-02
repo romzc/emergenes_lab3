@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { addTodo } from "../data/database/database";
-import { View, StyleSheet, Text, SafeAreaView, TextInput } from "react-native";
-import { title } from "process";
+import {
+  View,
+  StyleSheet,
+  Text,
+  SafeAreaView,
+  TextInput,
+  Button,
+} from "react-native";
 
 export const CreateScreen = () => {
   const [formState, setFormState] = useState({
@@ -12,9 +18,24 @@ export const CreateScreen = () => {
     priority: null,
   });
 
-  const handleForm = (event) => {
-    const { nativeID } = event;
+  const handleForm = (fieldName, value) => {
+    setFormState((prevState) => ({
+      ...prevState,
+      [fieldName]: value,
+    }));
   };
+
+  const saveTodo = async () => {
+    console.log("adding todos");
+    try {
+      const result = await addTodo("title", "description", Date(), Date(), 3);
+      console.log(`Task ${1} added with ID: ${result}`);
+    } catch (error) {
+      console.error(`Error adding Task ${1}:`, error);
+    }
+  };
+
+  console.log("create screen");
 
   return (
     <View style={styles.container}>
@@ -25,23 +46,25 @@ export const CreateScreen = () => {
 
       <View>
         <TextInput
-          nativeID="title"
           placeholder="Task title..."
           value={formState.title}
-          onChangeText={handleForm}
+          onChange={handleForm}
         />
         <TextInput
           placeholder="Task description..."
+          onChange={handleForm}
           value={formState.description}
         />
 
         <TextInput
-          onChangeText={handleForm}
+          onChange={handleForm}
           value={formState.priority}
           keyboardType="numeric"
           placeholder="priority Eg: 1"
         />
       </View>
+
+      <Button title="Add" onPress={saveTodo} />
     </View>
   );
 };

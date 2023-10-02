@@ -1,7 +1,9 @@
-import React from 'react'
+import React from "react";
 
 export const DetailScreen = () => {
   return (
-    <Text>DetailScreen</Text>
-  )
-}
+    <View>
+      <Text></Text>
+    </View>
+  );
+};

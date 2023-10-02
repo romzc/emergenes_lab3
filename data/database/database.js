@@ -11,7 +11,8 @@ export const initializeDatabase = () => {
                         description TEXT NOT NULL,
                         priority INTEGER NOT NULL,
                         end_date DATE NOT NULL,
-                        start_date DATE NOT NULL)`);
+                        start_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        done BOOLEAN DEFAULT 0 )`);
   });
 };
 
@@ -31,6 +32,7 @@ export const addTodo = (title, description, startDate, endDate, priority) => {
         "INSERT INTO todos (title, description, start_date, end_date, priority) VALUES (?, ?, ?, ?, ?)",
         [title, description, startDate, endDate, priority],
         (txtObj, result) => {
+          console.log("dentro de add todos")
           console.log(getTodos())
           resolve(result.insertId);
         },

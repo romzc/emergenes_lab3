@@ -9,9 +9,11 @@ import {
 } from "react-native";
 import { getTodos } from "../data/database/database";
 import { SearchView } from "../components/SearchView";
+import { CardPriority } from "../components/CardPriority";
 
 export const HomeScreen = ({ navigation }) => {
   const [todos, setTodos] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("")
 
   const loadTodos = async () => {
     try {
@@ -22,7 +24,9 @@ export const HomeScreen = ({ navigation }) => {
     }
   };
 
-  const todoRenders = todos.map((todo) => <Text>{todo.title}</Text>);
+  const todoRenders = todos.map((todo) => (
+    <Text key={todo.id}>{todo.title}</Text>
+  ));
 
   useEffect(() => {
     const controller = new AbortController();
@@ -30,19 +34,43 @@ export const HomeScreen = ({ navigation }) => {
     return () => controller.abort();
   }, []);
 
+  useEffect(() => {
+    const unsubscribeFocus = navigation.addListener("focus", () => {
+      loadTodos();
+    });
+    return () => {
+      unsubscribeFocus();
+    };
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
       <View style={styles.headContainer}>
         <Text style={styles.title}>Hello</Text>
         <Text style={styles.subTitle}>What will we do today?</Text>
-        <SearchView />
+        <SearchView onChangeTextQuery={setSearchQuery} value={searchQuery} />
       </View>
 
       <View style={styles.headContainer}>
-        <Text style={styles.subTitle}>Category</Text>
+        <Text style={styles.subTitle}>Priority</Text>
+        <ScrollView style={styles.cardContainer} horizontal={true}>
+          <CardPriority
+            color={"#0ca6ff"}
+            title={"High priority"}
+            quantity={3}
+          />
+          <CardPriority
+            color={"#ff5081"}
+            title={"Normal priority"}
+            quantity={3}
+          />
+          <CardPriority 
+            color={"#ffc136"} 
+            title={"Low priority"} 
+            quantity={3} 
+          />
+        </ScrollView>
       </View>
-
 
       <ScrollView style={styles.todoContainer}>{todoRenders}</ScrollView>
 
@@ -67,7 +95,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 24,
-    rowGap: 20
+    rowGap: 20,
   },
   headContainer: {
     display: "flex",
@@ -84,7 +112,7 @@ const styles = StyleSheet.create({
   },
   todoContainer: {
     flex: 2,
-    color: "#000"
+    color: "#000",
   },
   floatButtonContainer: {
     position: "absolute",
@@ -103,5 +131,10 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 40,
     fontWeight: "bold",
+  },
+  cardContainer: {
+    display: "flex",
+    flexDirection: "row",
+    columnGap: 10
   },
 });
