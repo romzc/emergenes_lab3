@@ -6,6 +6,7 @@ import { DetailScreen } from "./screens/DetailScreen";
 import { CreateScreen } from "./screens/CreateScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
+import { UpdateScreen } from "./screens/UpdateScreen";
 // expo add expo-sqlite
 
 /*
@@ -35,6 +36,11 @@ export default function App() {
           name="Detail"
           options={{ title: null }}
           component={DetailScreen}
+        />
+        <Stack.Screen
+          name="Update"
+          options={{ title: null }}
+          component={UpdateScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -26,7 +26,7 @@ export const HomeScreen = ({ navigation }) => {
   };
 
   const todoRenders = todos.map((todo) => (
-    <TodoItem key={todo.id}  task={todo}/>
+    <TodoItem key={todo.id}  task={todo} navigation={navigation} />
   ));
 
   useEffect(() => {

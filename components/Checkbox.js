@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-export const Checkbox = ({ checked, onChange }) => {
+export const CheckBox = ({ checked, onChange }) => {
   const toggleCheckbox = () => {
     onChange(!checked);
   };
@@ -23,7 +23,6 @@ export const Checkbox = ({ checked, onChange }) => {
 const styles = StyleSheet.create({
   checkboxContainer: {
     borderWidth: 1,
-    borderColor: "blue",
     width: 28,
     height: 28,
     justifyContent: "center",

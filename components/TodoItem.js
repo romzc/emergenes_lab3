@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { Checkbox } from "../components/CheckBox";
+import { CheckBox } from "./CheckBox";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-export const TodoItem = ({ task }) => {
+export const TodoItem = ({ task, navigation }) => {
   const { id, title, description, done, end_date, start_date, priority } = task;
   const [isChecked, setIsChecked] = useState(done);
 
@@ -20,7 +21,8 @@ export const TodoItem = ({ task }) => {
   };
 
   const textStyle = {
-    textDecorationLine: done ? "line-through" : "none",
+    textDecorationLine: isChecked ? "line-through" : "none",
+    textDecorationColor: isChecked ? "black" : "transparent", // Cambio de color
   };
 
   return (
@@ -28,16 +30,19 @@ export const TodoItem = ({ task }) => {
       style={[style.todoItemContainer, { backgroundColor: getPriorityColor() }]}
     >
       <View style={style.checkboxContainer}>
-        <Checkbox
+        <CheckBox
           style={style.checkbox}
           checked={isChecked}
           onChange={setIsChecked}
         />
       </View>
-      <View style={style.textContainer}>
+      <TouchableOpacity
+        style={style.textContainer}
+        onPress={() => navigation.navigate("Detail")}
+      >
         <Text style={[style.title, textStyle]}>{title}</Text>
         <Text style={[style.description, textStyle]}>{description}</Text>
-      </View>
+      </TouchableOpacity>
       <View style={style.dateContainer}>
         <Text style={[style.endDate, textStyle]}>Fecha de fin: {end_date}</Text>
       </View>
