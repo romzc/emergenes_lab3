@@ -48,7 +48,8 @@ export const getTodos = () => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "SELECT * FROM todos", [],
+        "SELECT * FROM todos",
+        [],
         (txtObj, resultSet) => resolve(resultSet.rows._array),
         (txtObj, error) => reject(error)
       );
@@ -56,10 +57,25 @@ export const getTodos = () => {
   });
 };
 
-export const getTodo = () => {
-
-}
-
-export const deleteTodo = () => {
-  
-}
+export const getTodoById = (idTodo) => {
+  return new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "SELECT * FROM todos WHERE id = ?",
+        [idTodo],
+        (txObject, results) => {
+          const len = results.rows.length;
+          if (len > 0) {
+            const row = results.rows.item(0);
+            resolve(row);
+          } else {
+            resolve(null);
+          }
+        },
+        (txObject, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+};
