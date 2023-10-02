@@ -11,42 +11,50 @@ export const initializeDatabase = () => {
                         description TEXT NOT NULL,
                         priority INTEGER NOT NULL,
                         end_date DATE NOT NULL,
-                        start_date DATE NOT NULL)`);
+                        start_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        done BOOLEAN DEFAULT 0 )`);
   });
 };
 
 /**
- * 
- * @param {string} title 
- * @param {string} description 
- * @param {Date} startDate 
- * @param {Date} endDate 
- * @param {number} priority 
- * @returns 
+ *
+ * @param {string} title
+ * @param {string} description
+ * @param {Date} startDate
+ * @param {Date} endDate
+ * @param {number} priority
+ * @returns
  */
-export const addTodo = (title, description, startDate, endDate, priority) => {
+export const addTodo = (title, description, endDate, priority) => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "INSERT INTO todos (title, description, start_date, end_date, priority) VALUES (?, ?, ?, ?, ?)",
-        [title, description, startDate, endDate, priority],
+        "INSERT INTO todos (title, description, end_date, priority) VALUES (?, ?, ?, ?)",
+        [title, description, endDate, priority],
         (txtObj, result) => {
-          console.log(getTodos())
+          console.log(getTodos());
           resolve(result.insertId);
         },
-        (txtObj, error) => { reject(error);}
+        (txtObj, error) => {
+          reject(error);
+        }
       );
     });
   });
 };
 
-
 export const getTodos = () => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
-      tx.executeSql("SELECT * FROM todos",[],
-        (txtObj, resultSet) => {resolve(resultSet.rows._array)},
-        (txtObj, error) => {reject(error);}
+      tx.executeSql(
+        "SELECT * FROM todos",
+        [],
+        (txtObj, resultSet) => {
+          resolve(resultSet.rows._array);
+        },
+        (txtObj, error) => {
+          reject(error);
+        }
       );
     });
   });
