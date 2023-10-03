@@ -44,6 +44,29 @@ export const addTodo = (title, description, endDate, priority) => {
   });
 };
 
+
+export const updateTodo = (id,title, description, endDate, priority) => {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Agrega ceros a la izquierda si es necesario
+  const day = String(currentDate.getDate()).padStart(2, "0"); // Agrega ceros a la izquierda si es necesario
+  const startDate = `${year}-${month}-${day}`;
+
+  return new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "UPDATE todos SET title = ?, description = ?, start_date = ? , end_date = ? , priority = ? WHERE id = ? ",
+        [title, description, startDate, endDate, priority, id],
+        (txtObj, result) => resolve(result.updateTodo),
+        (txtObj, error) => reject(error)
+      );
+    });
+  });
+};
+
+
+
+
 export const getTodos = () => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
