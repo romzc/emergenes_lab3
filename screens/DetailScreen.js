@@ -72,10 +72,6 @@ export const DetailScreen  = () => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-
-  
-
-
   const  [inputValue, setInputValue]= useState("");
  
   const handleInputChange1 = (text) => {
@@ -84,8 +80,9 @@ export const DetailScreen  = () => {
 
 
 
+  let endDate = new Date(end_date);
+  endDate.setHours(0, 0, 0, 0);
 
-  let endDate = today;
 
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -101,8 +98,8 @@ export const DetailScreen  = () => {
   const handleDatePickerChange = (event, selectedDate) => {
     setShowDatePicker(false);
     if (selectedDate) {
-      const formattedDate = new Date(selectedDate);
-      handleInputChange("endDate", formattedDate);
+      const formattedDate = (new Date(selectedDate-1)).toISOString().split("T")[0];
+      handleInputChange("end_date", formattedDate);
     }
   };
 
@@ -116,7 +113,7 @@ export const DetailScreen  = () => {
     // Validación #2: La fecha seleccionada no debe ser menor a la del día actual
     const today = new Date();
 
-//    if (new Date(end_date) < today) {
+//    if (endDate < today) {
 //      alert("La fecha de fin no puede ser anterior a la fecha actual.");
 //      return;
 //    }
@@ -125,26 +122,15 @@ export const DetailScreen  = () => {
       idTodo,
       title,
       description,
-      endDate.toISOString().split("T")[0],
+      end_date,
       Number(priority),
+      done,
     );
 
     alert("Se actualizo la tarea ");
-
-    cleanForm();
   };
 
-  const cleanForm = () => {
-    // Limpia los campos después de crear la tarea
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    setTodo({
-      title: "",
-      description: "",
-      priority: "1",
-      endDate: todoDetail.end_date,
-    });
-  };
+
 
   return (
     <View style={styles.container}>
@@ -176,6 +162,16 @@ export const DetailScreen  = () => {
       </Picker>
 
 
+      <Text style={styles.label}>Estado:</Text>
+      <Picker
+        style={styles.picker}
+        selectedValue={done==true}
+        onValueChange={(itemValue) => handleInputChange("done", itemValue)}
+      >
+        <Picker.Item label="Hecho" value={true} />
+        <Picker.Item label="No Hecho" value={false}/>
+      </Picker>
+
       <Text style={styles.label}>Fecha de fin:</Text>
       <View style={styles.dateInputContainer}>
         <View style={styles.dateInputWrapper}>
@@ -187,7 +183,7 @@ export const DetailScreen  = () => {
           </TouchableOpacity>
           <TextInput
             style={styles.dateInput}
-            value={end_date.split("T")[0]}
+            value={end_date}
             placeholder="Selecciona una fecha"
             readnly
           />
@@ -198,7 +194,7 @@ export const DetailScreen  = () => {
       {showDatePicker && (
         <DatePicker
           style={styles.datePicker}
-          value={endDate ? new Date(end_date) : new Date()}
+          value={end_date+1 ? new Date(end_date+1) : new Date()}
           mode="date"
           placeholder="Selecciona una fecha"
           format="YYYY-MM-DD"
@@ -219,8 +215,6 @@ export const DetailScreen  = () => {
           onChange={handleDatePickerChange}
         />
       )}
-
-
 
       <Button title="Actualizar Tarea" onPress={handleCrearTarea} />
     </View>
@@ -292,4 +286,3 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
 });
-

@@ -45,7 +45,7 @@ export const addTodo = (title, description, endDate, priority) => {
 };
 
 
-export const updateTodo = (id,title, description, endDate, priority) => {
+export const updateTodo = (id,title, description, endDate, priority, done) => {
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Agrega ceros a la izquierda si es necesario
@@ -55,8 +55,8 @@ export const updateTodo = (id,title, description, endDate, priority) => {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        "UPDATE todos SET title = ?, description = ?, start_date = ? , end_date = ? , priority = ? WHERE id = ? ",
-        [title, description, startDate, endDate, priority, id],
+        "UPDATE todos SET title = ?, description = ?, start_date = ? , end_date = ? , priority = ? , done = ? WHERE id = ? ",
+        [title, description, startDate, endDate, priority, done ,id],
         (txtObj, result) => resolve(result.updateTodo),
         (txtObj, error) => reject(error)
       );
