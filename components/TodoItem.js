@@ -1,20 +1,15 @@
 import React, { useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { CheckBox } from "./CheckBox";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { updateTodoDoneStatus } from "../data/database/database";
+import { CheckBox } from "./Checkbox";
 
-export const TodoItem = ({
-  task,
-  onTaskDelete,
-  onTaskCompleted,
-}) => {
+export const TodoItem = ({ task, onTaskDelete, onTaskCompleted }) => {
   const { id, title, description, done, end_date, start_date, priority } = task;
 
   const [isChecked, setIsChecked] = useState(done);
   const navigation = useNavigation();
-
 
   const getPriorityColor = () => {
     switch (priority) {

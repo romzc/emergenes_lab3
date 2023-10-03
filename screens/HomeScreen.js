@@ -15,6 +15,7 @@ import { deleteTodo } from "../data/database/database";
 
 export const HomeScreen = ({ navigation }) => {
   const [todos, setTodos] = useState([]);
+  const [auxTodos, setAuxTodos] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
   const onTaskDelete = async (todoId) => {
@@ -38,13 +39,15 @@ export const HomeScreen = ({ navigation }) => {
   const loadTodos = async () => {
     try {
       const todoList = await getTodos();
-      setTodos(todoList.filter((todo) => !todo.done));
+      const filterTodoList = todoList.filter((todo) => !todo.done);
+      setTodos(filterTodoList);
+      setAuxTodos(filterTodoList);
     } catch (error) {
       console.error("Error loading todos", error);
     }
   };
 
-  const todoRenders = todos.map((todo) => (
+  const todoRenders = auxTodos.map((todo) => (
     <TodoItem
       key={todo.id}
       task={todo}
@@ -52,6 +55,19 @@ export const HomeScreen = ({ navigation }) => {
       onTaskCompleted={onTaskCompleted}
     />
   ));
+
+  const onChangeFilter = (value) => {
+    setSearchQuery(value);
+    const filterAux = todos.filter((item) => {
+      const { title, description } = item;
+      const searchTextLower = value.toLowerCase();
+      return (
+        title.toLowerCase().includes(searchTextLower) ||
+        description.toLowerCase().includes(searchTextLower)
+      );
+    });
+    setAuxTodos(filterAux);
+  };
 
   useEffect(() => {
     const controller = new AbortController();
@@ -71,9 +87,8 @@ export const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.headContainer}>
-        <Text style={styles.title}>Hola</Text>
         <Text style={styles.subTitle}>¿Qué haremos hoy dia?</Text>
-        <SearchView onChangeTextQuery={setSearchQuery} value={searchQuery} />
+        <SearchView onChangeTextQuery={onChangeFilter} value={searchQuery} />
       </View>
 
       <View style={styles.headContainer}>

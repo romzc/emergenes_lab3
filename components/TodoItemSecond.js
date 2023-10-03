@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { CheckBox } from "./CheckBox";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { updateTodoDoneStatus } from "../data/database/database";
+import { CheckBox } from "./Checkbox";
 
 export const TodoItemSecond = ({ task, onTaskDelete, onTaskCompleted }) => {
-
   const { id, title, description, done, end_date, start_date, priority } = task;
   const [isChecked, setIsChecked] = useState(done);
 
@@ -23,9 +22,8 @@ export const TodoItemSecond = ({ task, onTaskDelete, onTaskCompleted }) => {
     }
   };
 
-  
   const textStyle = {
-    textDecorationLine: isChecked ? "line-through" : "none",
+    textDecorationLine: isChecked ? "none" : "none",
   };
 
   const handleCheckedItem = async () => {
@@ -45,8 +43,8 @@ export const TodoItemSecond = ({ task, onTaskDelete, onTaskCompleted }) => {
         />
       </View>
       <View style={style.textContainer}>
-        <Text style={[style.title, textStyle]}>Titulo</Text>
-        <Text style={[style.description, textStyle]}>{description}</Text>
+        <Text style={[style.title]}>{title}</Text>
+        <Text style={[style.description]}>{description}</Text>
       </View>
       <View style={style.dateContainer}>
         <Text style={[style.endDate, textStyle]}>Fecha de fin: {end_date}</Text>

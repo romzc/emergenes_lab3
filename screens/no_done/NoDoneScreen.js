@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { Button, Text, View } from "react-native";
 import { TodoItemSecond } from "../../components/TodoItemSecond";
-import { getTodos, updateTodoDoneStatus, deleteTodo } from "../../data/database/database";
+import {
+  getTodos,
+  updateTodoDoneStatus,
+  deleteTodo,
+} from "../../data/database/database";
 
 export const NoDoneScreen = () => {
   const [todos, setTodos] = useState([]);
@@ -9,7 +13,10 @@ export const NoDoneScreen = () => {
   const loadTodos = async () => {
     try {
       const todoList = await getTodos();
-      setTodos(todoList.filter((todo) => !todo.done));
+      console.log("data", todoList);
+      const filterTodoList = todoList.filter((todo) => !todo.done);
+      console.log("filter", filterTodoList);
+      setTodos(filterTodoList);
     } catch (error) {
       console.error("Error loading todos", error);
     }
@@ -48,11 +55,9 @@ export const NoDoneScreen = () => {
     return () => controller.abort();
   }, []);
 
-  console.log(todos)
-
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <View>{todoRenders}</View>
+      <View>{todos.length !== 0 && todoRenders}</View>
     </View>
   );
 };
