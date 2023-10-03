@@ -6,7 +6,7 @@ import DatePicker from "@react-native-community/datetimepicker";
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-export const CreateScreen = () => {
+export const CreateScreen = ({navigation}) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -58,10 +58,8 @@ export const CreateScreen = () => {
       endDate.toISOString().split("T")[0],
       Number(priority)
     );
-
-    console.log("se guardo la tarea");
-
     cleanForm();
+    navigation.navigate("Home")
   };
 
   const cleanForm = () => {

@@ -11,10 +11,21 @@ import { getTodos } from "../data/database/database";
 import { SearchView } from "../components/SearchView";
 import { CardPriority } from "../components/CardPriority";
 import { TodoItem } from "../components/TodoItem";
+import { deleteTodo } from "../data/database/database";
+
 
 export const HomeScreen = ({ navigation }) => {
   const [todos, setTodos] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const onTaskDelete = async (todoId) => {
+    try {
+      await deleteTodo(todoId);
+      setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== todoId));
+    } catch (error) {
+      console.error("Error deleting todo", error);
+    }
+  };
 
   const loadTodos = async () => {
     try {
@@ -26,14 +37,14 @@ export const HomeScreen = ({ navigation }) => {
   };
 
   const todoRenders = todos.map((todo) => (
-    <TodoItem key={todo.id}  task={todo} navigation={navigation} />
+    <TodoItem key={todo.id} task={todo} onTaskDelete={onTaskDelete} />
   ));
 
   useEffect(() => {
     const controller = new AbortController();
     loadTodos();
     return () => controller.abort();
-  }, []);
+  }, [todos.length]);
 
   useEffect(() => {
     const unsubscribeFocus = navigation.addListener("focus", () => {
@@ -43,6 +54,7 @@ export const HomeScreen = ({ navigation }) => {
       unsubscribeFocus();
     };
   }, [navigation]);
+
 
   return (
     <View style={styles.container}>
@@ -56,17 +68,17 @@ export const HomeScreen = ({ navigation }) => {
         <Text style={styles.subTitle}>Prioridad</Text>
         <ScrollView style={styles.cardContainer} horizontal={true}>
           <CardPriority
-            color={"#ff5081"}
+            color={"#FF5733"}
             title={"Prioridad\nalta"}
             quantity={1}
           />
           <CardPriority
-            color={"#0ca6ff"}
+            color={"#FFD633"}
             title={"Prioridad\nnormal"}
             quantity={2}
           />
           <CardPriority
-            color={"#ffc136"}
+            color={"#33FF57"}
             title={"Prioridad\nbaja"}
             quantity={3}
           />
@@ -110,7 +122,7 @@ const styles = StyleSheet.create({
     display: "flex",
     width: "100%",
     rowGap: 12,
-    flex: 1
+    flex: 1,
   },
   title: {
     fontSize: 16,

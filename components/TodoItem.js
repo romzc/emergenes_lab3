@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { Checkbox } from "./Checkbox";
+import { CheckBox } from "./CheckBox";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import { updateTodoDoneStatus } from "../data/database/database";
 
-export const TodoItem = ({ task, navigation }) => {
+
+export const TodoItem = ({ task, onTaskDelete }) => {
   const { id, title, description, done, end_date, start_date, priority } = task;
   const [isChecked, setIsChecked] = useState(done);
   const navigation = useNavigation();
@@ -23,13 +25,19 @@ export const TodoItem = ({ task, navigation }) => {
   };
 
   const textStyle = {
-    textDecorationLine: done ? "line-through" : "none",
+    textDecorationLine: isChecked ? "line-through" : "none",
   };
+
+  const handleCheckedItem = async () => {
+    await updateTodoDoneStatus(id, !isChecked)
+    setIsChecked(prev => !prev)
+  }
 
   const handleTitlePress = () => {
     // Navegar a la pantalla de detalle pasando los datos que desees
     navigation.navigate("Detail", { idTodo: id });
   };
+
 
   return (
     <View
@@ -39,17 +47,24 @@ export const TodoItem = ({ task, navigation }) => {
         <CheckBox
           style={style.checkbox}
           checked={isChecked}
-          onChange={setIsChecked}
+          onChange={handleCheckedItem}
         />
       </View>
       <View style={style.textContainer}>
         <TouchableOpacity onPress={handleTitlePress}>
           <Text style={[style.title, textStyle]}>{title}</Text>
+          <Text style={[style.description, textStyle]}>{description}</Text>
         </TouchableOpacity>
-        <Text style={[style.description, textStyle]}>{description}</Text>
-      </TouchableOpacity>
+      </View>
       <View style={style.dateContainer}>
         <Text style={[style.endDate, textStyle]}>Fecha de fin: {end_date}</Text>
+      </View>
+      <View style={style.deleteContainer}>
+        {isChecked ? (
+          <TouchableOpacity onPress={() => onTaskDelete(id)}>
+            <Text style={style.deleteIcon}>❎</Text>
+          </TouchableOpacity>
+        ): null}
       </View>
     </View>
   );
@@ -61,6 +76,7 @@ const style = StyleSheet.create({
     padding: 16,
     marginBottom: 8,
     borderRadius: 8,
+    alignItems: "center",
   },
   textContainer: {
     flex: 2,
@@ -78,17 +94,24 @@ const style = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: "#000",
   },
   description: {
     fontSize: 16,
-    color: "#FFFFFF",
+    color: "#000",
   },
   endDate: {
     fontSize: 14,
-    color: "#FFFFFF",
+    color: "#000",
   },
   checkbox: {
     margin: 8,
+  },
+  deleteContainer: {
+    alignItems: "center", // Centrar verticalmente
+  },
+  deleteIcon: {
+    fontSize: 24,
+    color: "red",
   },
 });

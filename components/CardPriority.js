@@ -10,7 +10,7 @@ export const CardPriority = ({ color, quantity, title }) => {
   return (
     <View style={[style.cardContainer, cardStyle]}>
       <Text style={style.cartTitle}>{title}</Text>
-      <Text style={style.cardPriority}>{quantity} Tareas</Text>
+      <Text style={style.cardPriority}>Código: {quantity} </Text>
     </View>
   );
 };

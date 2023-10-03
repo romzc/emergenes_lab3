@@ -79,3 +79,45 @@ export const getTodoById = (idTodo) => {
     });
   });
 };
+
+export const deleteTodo = (idTodo) => {
+  return new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "DELETE FROM todos WHERE id = ?",
+        [idTodo],
+        (txObj, result) => {
+          if (result.rowsAffected > 0) {
+            resolve(true); // Éxito al eliminar
+          } else {
+            resolve(false); // No se encontró la tarea para eliminar
+          }
+        },
+        (txObj, error) => {
+          reject(error); // Error al eliminar
+        }
+      );
+    });
+  });
+};
+
+export const updateTodoDoneStatus = (idTodo, isDone) => {
+  return new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "UPDATE todos SET done = ? WHERE id = ?",
+        [isDone ? 1 : 0, idTodo], // Convierte a 1 si isDone es verdadero, 0 si es falso
+        (txObj, result) => {
+          if (result.rowsAffected > 0) {
+            resolve(true); // Éxito al actualizar el estado
+          } else {
+            resolve(false); // No se encontró la tarea para actualizar
+          }
+        },
+        (txObj, error) => {
+          reject(error); // Error al actualizar
+        }
+      );
+    });
+  });
+};

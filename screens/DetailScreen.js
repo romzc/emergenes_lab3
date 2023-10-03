@@ -84,8 +84,8 @@ export const DetailScreen = () => {
       </View>
       <View style={styles.propertyContainer}>
         <Text style={[styles.label]}>Estado:</Text>
-        <Text style={[styles.value, done ? styles.redText : styles.greenText]}>
-          {done ? "Pendiente" : "Hecho"}
+        <Text style={[styles.value, !done ? styles.redText : styles.greenText]}>
+          {!done ? "Pendiente" : "Hecho"}
         </Text>
       </View>
     </ScrollView>
