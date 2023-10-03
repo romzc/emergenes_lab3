@@ -41,11 +41,11 @@ export const TodoItemSecond = ({ task, onTaskDelete, onTaskCompleted }) => {
           style={style.checkbox}
           checked={isChecked}
           onChange={handleCheckedItem}
-          disabled={false}
+          disabled={done==1}
         />
       </View>
       <View style={style.textContainer}>
-        <Text style={[style.title, textStyle]}>Titulo</Text>
+        <Text style={[style.title, textStyle]}>{title}</Text>
         <Text style={[style.description, textStyle]}>{description}</Text>
       </View>
       <View style={style.dateContainer}>
@@ -64,11 +64,13 @@ export const TodoItemSecond = ({ task, onTaskDelete, onTaskCompleted }) => {
 
 const style = StyleSheet.create({
   todoItemContainer: {
+    display: "flex",
     flexDirection: "row",
     padding: 16,
     marginBottom: 8,
     borderRadius: 8,
     alignItems: "center",
+    width: 300
   },
   textContainer: {
     flex: 2,
