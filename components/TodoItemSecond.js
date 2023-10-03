@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-import { updateTodoDoneStatus } from "../data/database/database";
 import { CheckBox } from "./Checkbox";
 
 export const TodoItemSecond = ({ task, onTaskDelete, onTaskCompleted }) => {
   const { id, title, description, done, end_date, start_date, priority } = task;
   const [isChecked, setIsChecked] = useState(done);
+  const navigation = useNavigation();
 
   const getPriorityColor = () => {
     switch (priority) {
@@ -30,6 +30,11 @@ export const TodoItemSecond = ({ task, onTaskDelete, onTaskCompleted }) => {
     await onTaskCompleted(id, !isChecked);
   };
 
+  const handleTitlePress = () => {
+    // Navegar a la pantalla de detalle pasando los datos que desees
+    navigation.navigate("Detail", { idTodo: id });
+  };
+
   return (
     <View
       style={[style.todoItemContainer, { backgroundColor: getPriorityColor() }]}
@@ -43,8 +48,10 @@ export const TodoItemSecond = ({ task, onTaskDelete, onTaskCompleted }) => {
         />
       </View>
       <View style={style.textContainer}>
-        <Text style={[style.title, textStyle]}>{title}</Text>
-        <Text style={[style.description, textStyle]}>{description}</Text>
+        <TouchableOpacity onPress={handleTitlePress}>
+          <Text style={[style.title, textStyle]}>{title}</Text>
+          <Text style={[style.description, textStyle]}>{description}</Text>
+        </TouchableOpacity>
       </View>
       <View style={style.dateContainer}>
         <Text style={[style.endDate, textStyle]}>Fecha de fin: {end_date}</Text>
