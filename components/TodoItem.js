@@ -5,8 +5,11 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { updateTodoDoneStatus } from "../data/database/database";
 
-
-export const TodoItem = ({ task, onTaskDelete }) => {
+export const TodoItem = ({
+  task,
+  onTaskDelete,
+  onTaskCompleted = () => {},
+}) => {
   const { id, title, description, done, end_date, start_date, priority } = task;
   const [isChecked, setIsChecked] = useState(done);
   const navigation = useNavigation();
@@ -29,15 +32,13 @@ export const TodoItem = ({ task, onTaskDelete }) => {
   };
 
   const handleCheckedItem = async () => {
-    await updateTodoDoneStatus(id, !isChecked)
-    setIsChecked(prev => !prev)
-  }
+    await onTaskCompleted(id, !isChecked);
+  };
 
   const handleTitlePress = () => {
     // Navegar a la pantalla de detalle pasando los datos que desees
     navigation.navigate("Detail", { idTodo: id });
   };
-
 
   return (
     <View
@@ -48,6 +49,7 @@ export const TodoItem = ({ task, onTaskDelete }) => {
           style={style.checkbox}
           checked={isChecked}
           onChange={handleCheckedItem}
+          disabled={isChecked == 1 ? true : false}
         />
       </View>
       <View style={style.textContainer}>
@@ -64,7 +66,7 @@ export const TodoItem = ({ task, onTaskDelete }) => {
           <TouchableOpacity onPress={() => onTaskDelete(id)}>
             <Text style={style.deleteIcon}>❎</Text>
           </TouchableOpacity>
-        ): null}
+        ) : null}
       </View>
     </View>
   );

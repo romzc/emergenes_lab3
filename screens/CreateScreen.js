@@ -59,7 +59,7 @@ export const CreateScreen = ({navigation}) => {
       Number(priority)
     );
     cleanForm();
-    navigation.navigate("Home")
+    navigation.navigate("Main")
   };
 
   const cleanForm = () => {

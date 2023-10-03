@@ -7,12 +7,11 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { getTodos } from "../data/database/database";
+import { getTodos, updateTodoDoneStatus } from "../data/database/database";
 import { SearchView } from "../components/SearchView";
 import { CardPriority } from "../components/CardPriority";
 import { TodoItem } from "../components/TodoItem";
 import { deleteTodo } from "../data/database/database";
-
 
 export const HomeScreen = ({ navigation }) => {
   const [todos, setTodos] = useState([]);
@@ -27,17 +26,32 @@ export const HomeScreen = ({ navigation }) => {
     }
   };
 
+  const onTaskCompleted = async (todoId, status) => {
+    try {
+      await updateTodoDoneStatus(todoId, status);
+      setTodos((prevTodos) => prevTodos.filter((todo) => todo.done));
+    } catch (error) {
+      console.error("Error deleting todo", error);
+    }
+  };
+
   const loadTodos = async () => {
     try {
       const todoList = await getTodos();
-      setTodos(todoList);
+      console.log(todoList);
+      setTodos(todoList.filter((todo) => !todo.done));
     } catch (error) {
       console.error("Error loading todos", error);
     }
   };
 
   const todoRenders = todos.map((todo) => (
-    <TodoItem key={todo.id} task={todo} onTaskDelete={onTaskDelete} />
+    <TodoItem
+      key={todo.id}
+      task={todo}
+      onTaskDelete={onTaskDelete}
+      onTaskCompleted={onTaskCompleted}
+    />
   ));
 
   useEffect(() => {
@@ -54,7 +68,6 @@ export const HomeScreen = ({ navigation }) => {
       unsubscribeFocus();
     };
   }, [navigation]);
-
 
   return (
     <View style={styles.container}>
