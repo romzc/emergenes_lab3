@@ -38,7 +38,6 @@ export const HomeScreen = ({ navigation }) => {
   const loadTodos = async () => {
     try {
       const todoList = await getTodos();
-      console.log(todoList);
       setTodos(todoList.filter((todo) => !todo.done));
     } catch (error) {
       console.error("Error loading todos", error);
